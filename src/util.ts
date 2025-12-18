@@ -1,4 +1,4 @@
-import { getRelated, Item, mallPrice, print, toItem, visitUrl } from "kolmafia";
+import { getRelated, Item, mallPrice, print, Slot, toItem, toSlot, visitUrl } from "kolmafia";
 import { $item } from "libram";
 
 export function getCurrentCrimboWad(html: string): WadType | null {
@@ -106,6 +106,7 @@ export function results(wadTypes: WadType[]) {
   );
 
   const wadResults = Item.all()
+    .filter((i) => toSlot(i) !== Slot.none)
     .map((item) => {
       const p = getRelated(item, "pulverize");
       if (!p) return null;
