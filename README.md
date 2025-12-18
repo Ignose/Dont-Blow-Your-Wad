@@ -1,0 +1,17 @@
+# DontBlowYourWad
+
+Run the script with a specific wad type (cold, hot, stench, etc.) or arg "crimbo" to value the current Crimbo wad and print out positive ROI equipment to shmash.
+
+You can add this script to your own mafia with:
+
+`git checkout ignose/dontBlowYourWad release`
+
+Arguments:
+
+- crimbo:
+
+  - help: Automatically checks Twinkly and the current rotating wad values
+
+  - default: "false"
+
+This script is a work in progress. Beware bugs!
