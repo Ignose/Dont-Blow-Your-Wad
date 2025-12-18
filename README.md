@@ -4,7 +4,7 @@ Run the script with a specific wad type (cold, hot, stench, etc.) or arg "crimbo
 
 You can add this script to your own mafia with:
 
-`git checkout ignose/dontBlowYourWad release`
+`git checkout ignose/dont-blow-your-wad release`
 
 Arguments:
 
