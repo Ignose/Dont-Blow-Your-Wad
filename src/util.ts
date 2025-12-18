@@ -1,4 +1,4 @@
-import { mallPrice, Item, getRelated, print, toItem, visitUrl } from "kolmafia";
+import { getRelated, Item, mallPrice, print, toItem, visitUrl } from "kolmafia";
 import { $item } from "libram";
 
 export function getCurrentCrimboWad(html: string): WadType | null {
