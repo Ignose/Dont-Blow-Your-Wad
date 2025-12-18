@@ -3,7 +3,6 @@ import { sinceKolmafiaRevision } from "libram";
 import { getCurrentCrimboWad, results, WAD_TYPES, WadType } from "./util";
 import { visitUrl } from "kolmafia";
 
-
 export const args = Args.create("Dont_Waste_Your_Wad", "Be good, be kind", {
   all: Args.flag({
     help: "Value all elemental wads.",

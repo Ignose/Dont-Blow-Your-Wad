@@ -26,19 +26,19 @@ export function getCurrentCrimboWad(html: string): WadType | null {
 }
 
 export const WAD_TYPES = ["hot", "cold", "spooky", "stench", "sleaze"] as const;
-export type WadType = typeof WAD_TYPES[number];
+export type WadType = (typeof WAD_TYPES)[number];
 
 function wadValueFromPulverize(
   p: Record<string, number> | null,
   wadPrice: number,
-  wadType: WadType,
+  wadType: WadType
 ): number {
   if (!p) return 0;
 
   return (
-    (p[`${wadType} wad`] ?? 0) * wadPrice / 1_000_000 +
-    (p[`${wadType} nuggets`] ?? 0) * wadPrice / 5 / 1_000_000 +
-    (p[`${wadType} powder`] ?? 0) * wadPrice / 25 / 1_000_000
+    ((p[`${wadType} wad`] ?? 0) * wadPrice) / 1_000_000 +
+    ((p[`${wadType} nuggets`] ?? 0) * wadPrice) / 5 / 1_000_000 +
+    ((p[`${wadType} powder`] ?? 0) * wadPrice) / 25 / 1_000_000
   );
 }
 
@@ -68,9 +68,7 @@ interface PricegunItem {
 
 function fetchPricegunItem(item: Item): PricegunItem | null {
   try {
-    const text = visitUrl(
-      `https://pricegun.loathers.net/api/${item.id}`,
-    );
+    const text = visitUrl(`https://pricegun.loathers.net/api/${item.id}`);
     return JSON.parse(text) as PricegunItem;
   } catch {
     return null;
@@ -92,21 +90,19 @@ function pricegunPrice(item: Item): number | null {
   return pricegunCache.get(item)!;
 }
 
-
 export function results(wadTypes: WadType[]) {
   const twinklyMall = mallPrice($item`twinkly wad`);
-  const twinklyPricegun =
-    pricegunPrice($item`twinkly wad`) ?? twinklyMall;
+  const twinklyPricegun = pricegunPrice($item`twinkly wad`) ?? twinklyMall;
 
   const mallWadPrices = new Map<WadType, number>(
-    wadTypes.map((w) => [w, mallPrice(toItem(`${w} wad`))]),
+    wadTypes.map((w) => [w, mallPrice(toItem(`${w} wad`))])
   );
 
   const pricegunWadPrices = new Map<WadType, number>(
     wadTypes.map((w) => {
       const item = toItem(`${w} wad`);
       return [w, pricegunPrice(item) ?? mallPrice(item)];
-    }),
+    })
   );
 
   const wadResults = Item.all()
@@ -118,29 +114,21 @@ export function results(wadTypes: WadType[]) {
       let pricegunValue = 0;
 
       for (const wadType of wadTypes) {
-        mallValue += wadValueFromPulverize(
-          p,
-          mallWadPrices.get(wadType) ?? 0,
-          wadType,
-        );
+        mallValue += wadValueFromPulverize(p, mallWadPrices.get(wadType) ?? 0, wadType);
 
-        pricegunValue += wadValueFromPulverize(
-          p,
-          pricegunWadPrices.get(wadType) ?? 0,
-          wadType,
-        );
+        pricegunValue += wadValueFromPulverize(p, pricegunWadPrices.get(wadType) ?? 0, wadType);
       }
 
       // Twinkly always included
       mallValue +=
-        (p["twinkly wad"] ?? 0) * twinklyMall / 1_000_000 +
-        (p["twinkly nuggets"] ?? 0) * twinklyMall / 5 / 1_000_000 +
-        (p["twinkly powder"] ?? 0) * twinklyMall / 25 / 1_000_000;
+        ((p["twinkly wad"] ?? 0) * twinklyMall) / 1_000_000 +
+        ((p["twinkly nuggets"] ?? 0) * twinklyMall) / 5 / 1_000_000 +
+        ((p["twinkly powder"] ?? 0) * twinklyMall) / 25 / 1_000_000;
 
       pricegunValue +=
-        (p["twinkly wad"] ?? 0) * twinklyPricegun / 1_000_000 +
-        (p["twinkly nuggets"] ?? 0) * twinklyPricegun / 5 / 1_000_000 +
-        (p["twinkly powder"] ?? 0) * twinklyPricegun / 25 / 1_000_000;
+        ((p["twinkly wad"] ?? 0) * twinklyPricegun) / 1_000_000 +
+        ((p["twinkly nuggets"] ?? 0) * twinklyPricegun) / 5 / 1_000_000 +
+        ((p["twinkly powder"] ?? 0) * twinklyPricegun) / 25 / 1_000_000;
 
       const price = mallPrice(item);
       if (price <= 0) return null;
@@ -163,12 +151,8 @@ export function results(wadTypes: WadType[]) {
 
   for (const { item, mallNet, mallROI, pgNet, pgROI } of wadResults) {
     print(`For Item: ${item}:`);
-    print(
-      `  mall:     net ${mallNet.toFixed(0)} meat (ROI ${(mallROI * 100).toFixed(1)}%)`,
-    );
-    print(
-      `  pricegun: net ${pgNet.toFixed(0)} meat (ROI ${(pgROI * 100).toFixed(1)}%)`,
-    );
+    print(`  mall:     net ${mallNet.toFixed(0)} meat (ROI ${(mallROI * 100).toFixed(1)}%)`);
+    print(`  pricegun: net ${pgNet.toFixed(0)} meat (ROI ${(pgROI * 100).toFixed(1)}%)`);
     print(``);
   }
 }
