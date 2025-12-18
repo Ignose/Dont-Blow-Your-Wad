@@ -6945,7 +6945,7 @@ function results(wadTypes) {
     var item = (0,external_kolmafia_namespaceObject.toItem)("".concat(w, " wad"));
     return [w, (_pricegunPrice2 = pricegunPrice(item)) !== null && _pricegunPrice2 !== void 0 ? _pricegunPrice2 : (0,external_kolmafia_namespaceObject.mallPrice)(item)];
   }));
-  var wadResults = external_kolmafia_namespaceObject.Item.all().map(item => {
+  var wadResults = external_kolmafia_namespaceObject.Item.all().filter(i => (0,external_kolmafia_namespaceObject.toSlot)(i) !== external_kolmafia_namespaceObject.Slot.none).map(item => {
     var _p$twinklyWad, _p$twinklyNuggets, _p$twinklyPowder, _p$twinklyWad2, _p$twinklyNuggets2, _p$twinklyPowder2;
     var p = (0,external_kolmafia_namespaceObject.getRelated)(item, "pulverize");
     if (!p) return null;
